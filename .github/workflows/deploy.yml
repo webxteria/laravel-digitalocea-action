@@ -15,7 +15,7 @@ jobs:
       mysql:
         image: mysql:latest
         ports:
-          - "${DB_PORT}:3306"
+          - "3306:3306"
 
     steps:
       - uses: actions/checkout@v2
