@@ -23,4 +23,7 @@ jobs:
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
       - name: Create Database
+        run: |
+          mysql -uroot -hmysql -proot -e 'CREATE DATABASE IF NOT EXISTS communicate;'
+      - name: Create Tables
         run: php artisan migrate
