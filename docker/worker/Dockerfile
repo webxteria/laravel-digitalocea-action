@@ -2,7 +2,7 @@
 
 FROM webxteria/php-fpm
 
-RUN apk update && apk add supervisor mariadb-client
+RUN apt update && apt add supervisor mariadb-client
 
 COPY crontab /etc/periodic/1min/laravel-cron
 
