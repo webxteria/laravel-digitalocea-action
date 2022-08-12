@@ -1,0 +1,76 @@
+version: "3"
+
+services:
+  nginx:
+    build: docker/nginx
+    ports:
+      - "8083:80"
+    volumes:
+      - .:/var/www/html
+    networks:
+      - default
+    restart: unless-stopped
+
+  php-fpm:
+    build: docker/php-fpm
+    volumes:
+      - .:/var/www/html
+    networks:
+      - default
+    restart: unless-stopped
+    depends_on:
+      - mysql
+      - redis
+
+  worker:
+    build: docker/worker
+    volumes:
+      - .:/var/www/html
+    networks:
+      - default
+    restart: unless-stopped
+    depends_on:
+      - php-fpm
+      - redis
+
+  mysql:
+    image: mysql:latest
+    ports:
+      - "${DB_PORT}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_DATABASE: "${DB_DATABASE}"
+      MYSQL_USER: "${DB_USERNAME}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+    volumes:
+      - mysql57:/var/lib/mysql
+    networks:
+      - default
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis:/data
+    networks:
+      - default
+    restart: unless-stopped
+
+#  swagger:
+#    image: swaggerapi/swagger-ui
+#    environment:
+#     SWAGGER_JSON: /code/swagger.json
+#    volumes:
+#      - .:/code
+#    ports:
+#      - "3000:8080"
+networks:
+  default:
+    driver: "bridge"
+volumes:
+  mysql:
+    driver: "local"
+  mysql57:
+    driver: "local"
+  redis:
+    driver: "local"
