@@ -24,6 +24,6 @@ jobs:
         run: chmod -R 777 storage bootstrap/cache
       - name: Create Database
         run: |
-          mysql -uroot -h127.0.0.1 -proot -e 'CREATE DATABASE IF NOT EXISTS communicate;'
+          mysql -uroot -hmysql -proot -e 'CREATE DATABASE IF NOT EXISTS communicate;'
       - name: Create Tables
         run: php artisan migrate
