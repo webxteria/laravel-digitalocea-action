@@ -11,15 +11,11 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:latest
-        ports:
-          - "3306:3306"
-
     steps:
       - uses: actions/checkout@v2
 
+      - name: Docker Build
+        run: docker-compose build
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
       - name: Install Dependencies
